@@ -17,11 +17,21 @@ resource "aws_eks_cluster" "this" {
   version  = "1.29"
 
   vpc_config {
-    subnet_ids = data.terraform_remote_state.network.outputs.private_subnet_ids
+  subnet_ids = concat(
+    data.terraform_remote_state.network.outputs.public_subnet_ids,
+    data.terraform_remote_state.network.outputs.private_subnet_ids
+  )
 
-    endpoint_private_access = true
-    endpoint_public_access  = true
-  }
+  endpoint_private_access = true
+  endpoint_public_access  = true
+}
+
+  # vpc_config {
+  #   subnet_ids = data.terraform_remote_state.network.outputs.private_subnet_ids
+
+  #   endpoint_private_access = true
+  #   endpoint_public_access  = true
+  # }
 
   depends_on = [
     aws_iam_role_policy_attachment.eks_cluster_policy

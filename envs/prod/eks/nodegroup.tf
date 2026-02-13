@@ -12,6 +12,8 @@ resource "aws_eks_node_group" "default" {
 
   instance_types = ["t3.large"]
 
+  ami_type = "AL2023_x86_64_STANDARD"
+
   depends_on = [
     aws_iam_role_policy_attachment.node_worker,
     aws_iam_role_policy_attachment.node_cni,

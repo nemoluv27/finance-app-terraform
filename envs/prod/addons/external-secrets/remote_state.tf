@@ -6,9 +6,3 @@ data "terraform_remote_state" "eks" {
     region = "ca-central-1"
   }
 }
-
-data "aws_eks_cluster_auth" "this" {
-  name = data.terraform_remote_state.eks.outputs.cluster_name
-}
-
-

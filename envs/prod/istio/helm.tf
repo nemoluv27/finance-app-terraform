@@ -30,14 +30,23 @@ resource "helm_release" "ingressgateway" {
   version    = local.version
   namespace  = local.istio_ns
 
+  wait    = false          # ⭐ 핵심
+  timeout = 600
+
+  atomic  = false          # ⭐ 중요
+  replace = true
+
   values = [
     yamlencode({
       service = {
         type = "LoadBalancer"
+        loadBalancerClass = null
         annotations = {
-          "service.beta.kubernetes.io/aws-load-balancer-type"        = "nlb"
-          "service.beta.kubernetes.io/aws-load-balancer-scheme"      = "internet-facing"
-          "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type" = "ip"
+          "service.beta.kubernetes.io/aws-load-balancer-scheme" = "internet-facing"
+          "service.beta.kubernetes.io/aws-load-balancer-type" = "nlb"
+        #   "service.beta.kubernetes.io/aws-load-balancer-type" = "nlb-ip"
+        #   "service.beta.kubernetes.io/aws-load-balancer-scheme" = "internet-facing"
+        #   "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type" = "ip"
         }
 
         ports = [
